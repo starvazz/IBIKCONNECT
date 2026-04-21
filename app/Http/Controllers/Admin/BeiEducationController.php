@@ -16,10 +16,21 @@ class BeiEducationController extends Controller
     /**
      * Display a listing of education materials
      */
-    public function index()
+    public function index(Request $request)
     {
-        $educations = BeiEducation::latest()->paginate(15);
-        return view('bei.admin.educations.index', compact('educations'));
+        $filters = [
+            'search' => $request->get('search'),
+        ];
+
+        $query = BeiEducation::query();
+
+        if (!empty($filters['search'])) {
+            $query->where('title', 'like', "%{$filters['search']}%");
+        }
+
+        $educations = $query->latest()->paginate(15)->withQueryString();
+
+        return view('bei.admin.educations.index', compact('educations', 'filters'));
     }
 
     /**

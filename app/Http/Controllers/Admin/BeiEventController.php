@@ -21,10 +21,31 @@ class BeiEventController extends Controller
     /**
      * Display a listing of events
      */
-    public function index()
+    public function index(Request $request)
     {
-        $events = BeiEvent::latest('starts_at')->paginate(15);
-        return view('bei.admin.events.index', compact('events'));
+        $filters = [
+            'search' => $request->get('search'),
+            'is_published' => $request->get('is_published'),
+            'is_registration_open' => $request->get('is_registration_open'),
+        ];
+
+        $query = BeiEvent::query();
+
+        if ($filters['is_published'] !== null && $filters['is_published'] !== '') {
+            $query->where('is_published', $filters['is_published']);
+        }
+
+        if ($filters['is_registration_open'] !== null && $filters['is_registration_open'] !== '') {
+            $query->where('is_registration_open', $filters['is_registration_open']);
+        }
+
+        if (!empty($filters['search'])) {
+            $query->where('title', 'like', "%{$filters['search']}%");
+        }
+
+        $events = $query->latest('starts_at')->paginate(15)->withQueryString();
+
+        return view('bei.admin.events.index', compact('events', 'filters'));
     }
 
     /**
@@ -50,6 +71,9 @@ class BeiEventController extends Controller
             'is_published' => ['boolean'],
             'is_registration_open' => ['boolean'],
         ]);
+
+        $validated['is_published'] = $request->boolean('is_published');
+        $validated['is_registration_open'] = $request->boolean('is_registration_open');
 
         try {
             // Handle image upload if present
@@ -95,6 +119,9 @@ class BeiEventController extends Controller
             'is_published' => ['boolean'],
             'is_registration_open' => ['boolean'],
         ]);
+
+        $validated['is_published'] = $request->boolean('is_published');
+        $validated['is_registration_open'] = $request->boolean('is_registration_open');
 
         try {
             // Handle image upload if present
