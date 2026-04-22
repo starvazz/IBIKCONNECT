@@ -25,7 +25,7 @@
             <article class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
 
                 <!-- Purple Header Banner -->
-                <div class="relative min-h-[220px] flex items-center justify-center p-8" style="background: linear-gradient(135deg, #9333ea, #6d28d9);">
+                <div class="relative min-h-[220px] flex items-center justify-center p-8 bg-gradient-to-br from-purple-600 to-blue-600">
                     <!-- Decorative circles -->
                     <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4"></div>
                     <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4"></div>
@@ -131,7 +131,7 @@
             @endif
 
             <!-- CTA Card -->
-            <div class="rounded-2xl p-6 text-white relative overflow-hidden" style="background: linear-gradient(135deg, #9333ea, #6d28d9);">
+            <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-6 text-white relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                 <div class="relative">
                     <h3 class="text-lg font-bold mb-2">Siap Praktik?</h3>

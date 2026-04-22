@@ -51,14 +51,14 @@
         <article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
 
             <!-- Colored Header -->
-            <div class="bg-gradient-to-br {{ $grad }} p-6 relative min-h-[160px] flex flex-col justify-between">
+            <div class="bg-gradient-to-br from-purple-600 to-blue-600 p-6 relative min-h-[160px] flex flex-col justify-between">
                 <!-- Number badge -->
                 <div class="self-end">
                     <span class="bg-white/25 text-white text-xs font-bold px-2.5 py-1 rounded-full">{{ $num }}</span>
                 </div>
                 <!-- Icon -->
                 <div>
-                    <svg class="w-10 h-10 text-white/90 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10 text-white mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         {!! $icon !!}
                     </svg>
                     <h3 class="text-white font-bold text-lg leading-tight line-clamp-2">
