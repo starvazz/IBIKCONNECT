@@ -21,8 +21,8 @@
         <!-- Main Content -->
         <div class="lg:col-span-2">
             <article class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                @if($news->image)
-                <img src="{{ asset('storage/' . $news->image) }}" alt="{{ $news->title }}" class="w-full h-96 object-cover">
+                @if($news->featured_image)
+                <img src="{{ $news->featured_image_url }}" alt="{{ $news->title }}" class="w-full h-96 object-cover">
                 @endif
                 
                 <div class="p-8">

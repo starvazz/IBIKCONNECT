@@ -23,7 +23,7 @@
             <!-- Event Header -->
             <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
                 @if($event->banner_image)
-                <img src="{{ asset('storage/' . $event->banner_image) }}" alt="{{ $event->title }}" class="w-full h-64 object-cover">
+                <img src="{{ $event->banner_image_url }}" alt="{{ $event->title }}" class="w-full h-64 object-cover">
                 @else
                 <div class="w-full h-64 bg-linear-to-br from-blue-500 to-purple-500"></div>
                 @endif

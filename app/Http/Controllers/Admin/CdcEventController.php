@@ -148,6 +148,34 @@ class CdcEventController extends Controller
     }
 
     /**
+     * Reset registration status back to pending
+     */
+    public function resetRegistration(CdcEventRegistration $registration)
+    {
+        try {
+            $registration->update(['status' => CdcEventRegistration::STATUS_PENDING]);
+
+            return back()->with('success', 'Status pendaftaran direset ke pending!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mereset status: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a registration
+     */
+    public function destroyRegistration(CdcEventRegistration $registration)
+    {
+        try {
+            $registration->delete();
+
+            return back()->with('success', 'Pendaftaran berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menghapus pendaftaran: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Export registrations to Excel
      */
     public function exportRegistrations(CdcEvent $event)

@@ -44,11 +44,11 @@
                         class="flex-1 text-center px-3 py-1.5 text-sm bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors">
                         Edit
                     </a>
-                    <form action="{{ route('admin.bei.galleries.destroy', $gallery) }}" method="POST" 
-                        onsubmit="return confirm('Yakin ingin menghapus foto ini?')" class="flex-1">
+                    <form id="delete-form-{{ $gallery->id }}" action="{{ route('admin.bei.galleries.destroy', $gallery) }}" method="POST" class="flex-1">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" 
+                        <button type="button"
+                            onclick="openDeleteModal({{ $gallery->id }}, '{{ addslashes($gallery->title ?? 'foto ini') }}')"
                             class="w-full px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors">
                             Hapus
                         </button>
@@ -77,3 +77,55 @@
     @endif
 </div>
 @endsection
+
+<div id="deleteModal" class="hidden" role="dialog" aria-modal="true" style="position: fixed; inset: 0; z-index: 9999;">
+    <div onclick="closeDeleteModal()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5);"></div>
+    <div style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;">
+        <div class="bg-white rounded-xl shadow-2xl p-5 sm:p-6 relative" style="width: 100%; max-width: 360px;">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Hapus Foto</h3>
+            <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+                Yakin ingin menghapus "<span id="delete-gallery-title" class="font-semibold text-gray-800"></span>"?
+                Data yang dihapus tidak bisa dikembalikan.
+            </p>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeDeleteModal()" class="px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="button" onclick="confirmDelete()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-red-600 rounded-md text-sm text-white font-semibold shadow-sm hover:bg-red-700 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteFormId = null;
+
+    function openDeleteModal(id, title) {
+        deleteFormId = 'delete-form-' + id;
+        document.getElementById('delete-gallery-title').textContent = title;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        deleteFormId = null;
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    function confirmDelete() {
+        if (deleteFormId) {
+            document.getElementById(deleteFormId).submit();
+        }
+        closeDeleteModal();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !document.getElementById('deleteModal').classList.contains('hidden')) {
+            closeDeleteModal();
+        }
+    });
+</script>

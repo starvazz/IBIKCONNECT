@@ -26,6 +26,14 @@
         </a>
     </div>
 
+    <!-- Flash Messages -->
+    @if(session('success'))
+    <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{{ session('error') }}</div>
+    @endif
+
     <!-- Event Info Card -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -103,28 +111,40 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-right text-sm font-medium">
-                            @if($registration->status === 'pending')
-                                <div class="flex items-center justify-end gap-2">
-                                    <form action="{{ route('admin.cdc.events.registrations.approve', $registration) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" class="text-green-600 hover:text-green-900" title="Setujui">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('admin.cdc.events.registrations.reject', $registration) }}" method="POST" class="inline">
-                                        @csrf
-                                        <button type="submit" class="text-red-600 hover:text-red-900" title="Tolak">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            @else
-                                <span class="text-gray-400">-</span>
-                            @endif
+                            <div class="flex items-center justify-end gap-2">
+                                @if($registration->status === 'pending')
+                                <form action="{{ route('admin.cdc.events.registrations.approve', $registration) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="p-1.5 rounded bg-green-50 text-green-600 hover:bg-green-100" title="Setujui">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                <form action="{{ route('admin.cdc.events.registrations.reject', $registration) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="p-1.5 rounded bg-red-50 text-red-600 hover:bg-red-100" title="Tolak">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                @else
+                                <form action="{{ route('admin.cdc.events.registrations.reset', $registration) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="p-1.5 rounded bg-blue-50 text-blue-600 hover:bg-blue-100" title="Reset ke Pending">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    </button>
+                                </form>
+                                @endif
+                                <form id="delete-reg-{{ $registration->id }}" action="{{ route('admin.cdc.events.registrations.destroy', $registration) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="openDeleteModal({{ $registration->id }}, '{{ addslashes($registration->name) }}')" class="p-1.5 rounded bg-gray-50 text-gray-600 hover:bg-gray-100" title="Hapus">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -151,3 +171,55 @@
     </div>
 </div>
 @endsection
+
+<div id="deleteModal" class="hidden" role="dialog" aria-modal="true" style="position: fixed; inset: 0; z-index: 9999;">
+    <div onclick="closeDeleteModal()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5);"></div>
+    <div style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;">
+        <div class="bg-white rounded-xl shadow-2xl p-5 sm:p-6 relative" style="width: 100%; max-width: 360px;">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Hapus Pendaftaran</h3>
+            <p class="text-sm text-gray-600 mb-5 leading-relaxed">
+                Yakin ingin menghapus pendaftaran "<span id="delete-reg-name" class="font-semibold text-gray-800"></span>"?
+                Data yang dihapus tidak bisa dikembalikan.
+            </p>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeDeleteModal()" class="px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="button" onclick="confirmDelete()" class="inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-red-600 rounded-md text-sm text-white font-semibold shadow-sm hover:bg-red-700 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteFormId = null;
+
+    function openDeleteModal(id, name) {
+        deleteFormId = 'delete-reg-' + id;
+        document.getElementById('delete-reg-name').textContent = name;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        deleteFormId = null;
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    function confirmDelete() {
+        if (deleteFormId) {
+            document.getElementById(deleteFormId).submit();
+        }
+        closeDeleteModal();
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !document.getElementById('deleteModal').classList.contains('hidden')) {
+            closeDeleteModal();
+        }
+    });
+</script>

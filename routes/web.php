@@ -73,6 +73,8 @@ Route::middleware('auth')->prefix('admin-page')->name('admin.')->group(function 
         Route::get('events/{event}/registrations', [CdcEventController::class, 'registrations'])->name('events.registrations');
         Route::post('events/registrations/{registration}/approve', [CdcEventController::class, 'approveRegistration'])->name('events.registrations.approve');
         Route::post('events/registrations/{registration}/reject', [CdcEventController::class, 'rejectRegistration'])->name('events.registrations.reject');
+        Route::post('events/registrations/{registration}/reset', [CdcEventController::class, 'resetRegistration'])->name('events.registrations.reset');
+        Route::delete('events/registrations/{registration}', [CdcEventController::class, 'destroyRegistration'])->name('events.registrations.destroy');
         Route::get('events/{event}/export', [CdcEventController::class, 'exportRegistrations'])->name('events.export');
         Route::post('events/{event}/toggle-publish', [CdcEventController::class, 'togglePublish'])->name('events.toggle-publish');
         Route::post('events/{event}/toggle-registration', [CdcEventController::class, 'toggleRegistration'])->name('events.toggle-registration');
