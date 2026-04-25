@@ -10,4 +10,4 @@ cmds = [
 ]
 
 [start]
-cmd = "php -S 0.0.0.0:${PORT} server.php"
+cmd = "php -S 0.0.0.0:${PORT} -t public server.php"
