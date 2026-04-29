@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CdcAdminController;
 use App\Http\Controllers\Admin\CdcJobController;
 use App\Http\Controllers\Admin\CdcEventController;
 use App\Http\Controllers\Admin\CdcNewsController;
+use App\Http\Controllers\Admin\CdcRegistrationController;
 use App\Http\Controllers\Auth\AdminLoginController;
 
 // Public routes - CDC
@@ -78,6 +79,8 @@ Route::middleware('auth')->prefix('admin-page')->name('admin.')->group(function 
         Route::get('events/{event}/export', [CdcEventController::class, 'exportRegistrations'])->name('events.export');
         Route::post('events/{event}/toggle-publish', [CdcEventController::class, 'togglePublish'])->name('events.toggle-publish');
         Route::post('events/{event}/toggle-registration', [CdcEventController::class, 'toggleRegistration'])->name('events.toggle-registration');
+
+        Route::get('registrations', [CdcRegistrationController::class, 'index'])->name('registrations.index');
         
         // News
         Route::resource('news', CdcNewsController::class);
