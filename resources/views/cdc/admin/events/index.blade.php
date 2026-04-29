@@ -175,7 +175,7 @@
 </div>
 @endsection
 
-<div id="deleteModal" class="hidden" role="dialog" aria-modal="true" style="position: fixed; inset: 0; z-index: 9999;">
+<div id="deleteModal" class="hidden" role="dialog" aria-modal="true" style="position: fixed; inset: 0; z-index: 9999; display: none;">
     <div onclick="closeDeleteModal()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5);"></div>
     <div style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;">
         <div class="bg-white rounded-xl shadow-2xl p-5 sm:p-6 relative" style="width: 100%; max-width: 360px;">
@@ -205,12 +205,16 @@
     function openDeleteModal(id, title) {
         deleteFormId = 'delete-form-' + id;
         document.getElementById('delete-event-title').textContent = title;
-        document.getElementById('deleteModal').classList.remove('hidden');
+        const modal = document.getElementById('deleteModal');
+        modal.classList.remove('hidden');
+        modal.style.display = 'block';
     }
 
     function closeDeleteModal() {
         deleteFormId = null;
-        document.getElementById('deleteModal').classList.add('hidden');
+        const modal = document.getElementById('deleteModal');
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
     }
 
     function confirmDelete() {

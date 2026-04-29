@@ -158,7 +158,7 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="hidden" role="dialog" aria-modal="true" style="position: fixed; inset: 0; z-index: 9999;">
+<div id="deleteModal" class="hidden" role="dialog" aria-modal="true" style="position: fixed; inset: 0; z-index: 9999; display: none;">
     <!-- Backdrop -->
     <div onclick="closeDeleteModal()" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5);"></div>
     
@@ -193,12 +193,16 @@
     function openDeleteModal(id, title) {
         deleteFormId = 'delete-form-' + id;
         document.getElementById('delete-news-title').textContent = title;
-        document.getElementById('deleteModal').classList.remove('hidden');
+        const modal = document.getElementById('deleteModal');
+        modal.classList.remove('hidden');
+        modal.style.display = 'block';
     }
     
     function closeDeleteModal() {
         deleteFormId = null;
-        document.getElementById('deleteModal').classList.add('hidden');
+        const modal = document.getElementById('deleteModal');
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
     }
     
     function confirmDelete() {
